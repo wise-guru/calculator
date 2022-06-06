@@ -48,3 +48,47 @@ const add = function(a, b) {
       if (opr = '^') return power(a, b);
       if (opr = '!') return factorial(a, b);
   }
+
+  const screen = document.querySelector('#screen')
+  const buttons = document.querySelectorAll('button')
+ 
+//   const defaultScreen = document.createElement('div')
+//   defaultScreen.textContent = 0;
+//   defaultScreen.classList.add('defaultScreen')
+//   screen.appendChild(defaultScreen);
+  
+
+  function numClick(num) {
+      screen.textContent += num;
+  }
+
+  buttons.forEach((input) => {
+      input.onclick = () => {
+          if (input.id == 'clear') {
+              screen.textContent = '0';
+          } else if (input.id == 'backspace') {
+              let string = screen.textContent.toString();
+              string.textContent = string.substr(0, string.length-1)
+          } else if (screen.textContent != '' && input.id == 'equal') {
+            screen.textContent = operate();
+          } else if (screen.textContent == '' && input.id == 'equal') {
+              screen.textContent = '0';
+              setTimeout(() => (screen.textContent = ''), 2000);
+          } else {
+              screen.textContent = input.id;
+          }
+      }
+  })
+
+const toggleThemeBtn = document.querySelector('.toggle-theme');
+const calculator = document.querySelector('.calculator')
+const toggleIcon = document.querySelector('.toggle-icon')
+let darkMode = true;
+
+toggleThemeBtn.onclick = () => {
+    calculator.classList.toggle('dark');
+    toggleThemeBtn.classList.toggle('active');
+    darkMode  = !darkMode;
+}
+
+

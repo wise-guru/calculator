@@ -44,6 +44,7 @@ a {
 
 .toggle-theme.active {
     color: #333;
+    
 }
 
 .toggle-theme.active::before {
@@ -94,17 +95,13 @@ button:hover {
     transform: scale(1.1);
 }
 
-button#equal {
-    height: 130px;
-}
-
 /* Light Mode */
 
 .calculator {
     background-color: white;
 }
 
-.calculator #display {
+.calculator #screen {
     color: black;
 }
 
@@ -131,6 +128,10 @@ button#equal {
 
 .calculator.dark {
     background-color: #071115;
+}
+
+.calculator.dark #screen {
+    color: #f8fafd;
 }
 
 .calculator.dark button#clear {
