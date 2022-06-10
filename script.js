@@ -1,54 +1,8 @@
 let previousNum = '';
 let currentNum = '';
 let resultNum = '';
+let previousResult = '';
 let operator = '';
-
-
-//Functions for calculations//
-// const add = function() {
-//     previousNum = previousNum + currentNum;
-//   };
-  
-//   add();
-
-//   const subtract = function() {
-//     previousNum = previousNum - currentNum;
-//   };
-  
-//   const sum = function(array) {
-//       previousNum = array.reduce((previousNum, currentNum) => previousNum + currentNum, 0);
-//   };
-  
-//   const multiply = function(array) {
-//     previousNum = array.length
-//     ? array.reduce((previousNum, currentNum) => previousNum * currentNum)
-//     : 0;
-//   };
-
-//   const divide = function() {
-//       return previousNum / currentNum;
-//   }
-  
-//   const power = function() {
-//     previousNum = (Math.pow(previousNum, currentNum))
-      
-//   };
-
-//      const factorial = function(num) {
-//     let product = 1;
-  
-//     if (previousNum === 0) previousNum = 1;
-//     for (let i = num; i > 0; i--) {
-//       product *= i;
-//     }
-//     previousNum = product;
-//   };
-
-
-
-
-    //end of fucntions for calculations//
-
 
 const screen = document.querySelector('#screen')
 const buttons = document.querySelectorAll('button')
@@ -62,16 +16,19 @@ const decimal = document.querySelector('#decimal')
 const clear = document.querySelector('#clear')
 const backspace = document.querySelector('#backspace')
 
+window.addEventListener('keydown', handleKeys)
+
 const operate = function () {
     previousNum = Number(previousNum)
     currentNum = Number(currentNum)
+  
 
     if (operator === '+') {
-        resultNum = previousNum + currentNum;
+        previousNum = previousNum + currentNum;
     }   else if (operator === '-') {
-        resultNum = previousNum - currentNum;
+        previousNum = previousNum - currentNum;
     }   else if (operator === '*') {
-        resultNum = previousNum * currentNum;
+        previousNum = previousNum * currentNum;
     }   else if (operator === '/') {
         if(currentNum <= 0) {
             previousNum = "Error, cannot divide by 0"
@@ -80,18 +37,15 @@ const operate = function () {
             operator = ''
             return;
         }
-        resultNum = previousNum / currentNum;
+        previousNum = previousNum / currentNum;
     }   else if (operator === '^') {
-        resultNum = Math.pow(previousNum, currentNum)
-    }   else if (operator = 'clear') {
-        previousScreenNumber.textContent = ''
-        currentScreenNumber.textContent = '';
-    }
+        previousNum = Math.pow(previousNum, currentNum)
+    } 
     
     resultNum = roundNumber(resultNum)
     // previousNum = previousNum.toString();
     resultNum = resultNum.toString();
-    previousScreenNumber.textContent = `${previousNum} ${operator} ${currentNum} =`;
+    previousScreenNumber.textContent = `${previousNum}`;
     screenResults();
   }
 
@@ -101,6 +55,10 @@ const operate = function () {
       } else {
           currentScreenNumber.textContent = resultNum.slice(0, 14) + "..."
       }
+
+    //   previousScreenNumber.textContent = '';
+      operator = '';
+      currentNum = '';
   }
 
   function roundNumber(num) {
@@ -112,20 +70,20 @@ const operate = function () {
       previousNum = '';
       operator = '';
       previousScreenNumber.textContent = '';
-      currentScreenNumber.textContent = '0';
+      currentScreenNumber.textContent = '';
   }
 
   function deleteCalc() {
     if (currentNum !== "") {
         currentNum = currentNum.slice(0, -1);
-        currentDisplayNumber.textContent = currentNum;
+        currentScreenNumber.textContent = currentNum;
         if (currentNum === "") {
-          currentDisplayNumber.textContent = "0";
+          currentScreenNumber.textContent = "";
         }
       }
       if (currentNum === "" && previousNum !== "" && operator === "") {
         previousNum = previousNum.slice(0, -1);
-        currentDisplayNumber.textContent = previousNum;
+        currentScreenNumber.textContent = previousNum;
       }
 
   }
@@ -144,24 +102,79 @@ operators.forEach((btn) => {
     })
 })
 
-equal.addEventListener('click', operate);
-clear.addEventListener('click', clearCalc)
-backspace.addEventListener('click', deleteCalc)
+equal.addEventListener('click', () => {
+    if (currentNum != '' && previousNum != '') {
+        operate();
+    }
+});
+
+decimal.addEventListener('click', addDecimal);
+clear.addEventListener('click', clearCalc);
+backspace.addEventListener('click', deleteCalc);
 
 function handleNumber(number) {
+    if(previousNum !== '' && currentNum == '' && operator === '' ) {
+        previousNum = ''
+        previousScreenNumber.textContent = '';
+        currentScreenNumber.textContent = currentNum;
+    }
+
+    if(currentNum.length <= 11) {
     currentNum += number;
     currentScreenNumber.textContent = currentNum;
+    }
 }
 
 function handleOperator(op) {
-    operator = op;
-    previousNum = currentNum;
-    previousScreenNumber.textContent = `${previousNum} ${operator}`;
-    currentNum = '';
-    currentScreenNumber.textContent = '';
+  if (previousNum === "") {
+      previousNum = currentNum
+      operatorCheck(op);
+  } else if (currentNum === "") {
+      operatorCheck(op)
+  } else {
+      operate();
+      operator = op;
+      currentScreenNumber.textContent = ""
+      previousScreenNumber.textContent = `${previousNum} ${operator}`;
+  }
+    
+    
+    
 }
 
+function operatorCheck(text) {
+    
+    operator = text;
+    previousScreenNumber.textContent = `${previousNum} ${operator}`;
+    currentScreenNumber.textContent = '';
+    currentNum = '';
+}
 
+function addDecimal() {
+    if(!currentNum.includes('.')) {
+        currentNum += ".";
+        currentScreenNumber.textContent = currentNum;
+    }
+}
+
+function handleKeys(e) {
+    e.preventDefault()
+    if (e.key >= 0 && e.key <= 9) {
+        handleNumber(e.key);
+    }
+    if (e.key === "Enter" || "=" && currentNum != '' && previousNum != '') {
+        operate()
+    }
+    if (e.key === "+" || "-" || "/" || "*") {
+        handleOperator(e.key)
+    }
+    if (e.key === ".") {
+        addDecimal();
+    }
+    if(e.key === "Backspace") {
+        handleDelete();
+    }
+}
 
   
 
@@ -189,22 +202,3 @@ toggleThemeBtn.onclick = () => {
 
 
 
-//   buttons.forEach((input) => {
-//       input.onclick = () => {
-//           if (input.id == 'clear') {
-//               screen.textContent = '';
-//           } else if (input.id == 'backspace') {
-//               let string = screen.textContent.toString();
-//               string.textContent = string.slice(0, string.length-1);
-//           } else if (screen.textContent != '' && input.id == 'equal') {
-//             screen.textContent = operate();
-//           } else if (screen.textContent == '' && input.id == 'equal') {
-//               screen.textContent = 0;
-//               setTimeout(() => (screen.textContent = ''), 2000);
-//           } else if (screen.textContent == '.') {
-//               decimalCheck();
-//           } else {
-//               screen.textContent += input.id;
-//           }
-//       }
-//   })
