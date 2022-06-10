@@ -1,7 +1,5 @@
 let previousNum = '';
 let currentNum = '';
-let resultNum = '';
-let previousResult = '';
 let operator = '';
 
 const screen = document.querySelector('#screen')
@@ -88,8 +86,6 @@ const operate = function () {
 
   }
 
-
-
 numberBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         handleNumber(e.target.textContent)
@@ -137,9 +133,6 @@ function handleOperator(op) {
       currentScreenNumber.textContent = ""
       previousScreenNumber.textContent = `${previousNum} ${operator}`;
   }
-    
-    
-    
 }
 
 function operatorCheck(text) {
@@ -179,19 +172,7 @@ function handleKeys(e) {
       }
 }
 
-  
-
-
-
-
-
-
-
-
-
-
 const toggleThemeBtn = document.querySelector('.toggle-theme');
-// const calculator = document.querySelector('.calculator')
 const toggleIcon = document.querySelector('.toggle-icon')
 let darkMode = true;
 
