@@ -161,19 +161,22 @@ function handleKeys(e) {
     e.preventDefault()
     if (e.key >= 0 && e.key <= 9) {
         handleNumber(e.key);
-    }
-    if (e.key === "Enter" || "=" && currentNum != '' && previousNum != '') {
-        operate()
-    }
-    if (e.key === "+" || "-" || "/" || "*") {
-        handleOperator(e.key)
-    }
-    if (e.key === ".") {
+      }
+      if (
+        e.key === "Enter" ||
+        (e.key === "=" && currentNum != "" && previousNum != "")
+      ) {
+        operate();
+      }
+      if (e.key === "+" || e.key === "-" || e.key === "/" || e.key === "*") {
+        handleOperator(e.key);
+      }
+      if (e.key === ".") {
         addDecimal();
-    }
-    if(e.key === "Backspace") {
-        handleDelete();
-    }
+      }
+      if (e.key === "Backspace") {
+        deleteCalc();
+      }
 }
 
   
