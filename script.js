@@ -40,10 +40,10 @@ const operate = function () {
         previousNum = Math.pow(previousNum, currentNum)
     } 
     
-    resultNum = roundNumber(resultNum)
+    resultNum = roundNumber(previousNum)
     // previousNum = previousNum.toString();
     resultNum = resultNum.toString();
-    previousScreenNumber.textContent = `${previousNum}`;
+    previousScreenNumber.textContent = '';
     screenResults();
   }
 
@@ -161,7 +161,7 @@ function handleKeys(e) {
       ) {
         operate();
       }
-      if (e.key === "+" || e.key === "-" || e.key === "/" || e.key === "*") {
+      if (e.key === "+" || e.key === "-" || e.key === "/" || e.key === "*" || e.key === "^") {
         handleOperator(e.key);
       }
       if (e.key === ".") {
